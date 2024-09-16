@@ -1,0 +1,1 @@
+{"version":3,"names":[],"sources":["HCEApplication.ts"],"sourcesContent":["type HCEApplication = {\n  type: string;\n  content: any;\n};\n\nexport default HCEApplication;\n"],"mappings":"","ignoreList":[]}
