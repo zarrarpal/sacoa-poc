@@ -10,9 +10,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "buffer": "^6.0.3",
     "custom-module": "file:custom-modules/react-native-hce",
     "react": "18.3.1",
-    "react-native": "0.75.3"
+    "react-native": "0.75.3",
+    "react-native-hce": "^0.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -1,11 +1,18 @@
 // App.tsx
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
 import {useColorScheme} from 'react-native';
 import Colors from './Colors'; // Adjust the import based on your project structure
-import HCE from 'custom-module';
+import {
+  HCESession,
+  NFCTagType4,
+  NFCTagType4NDEFContentType,
+} from 'react-native-hce';
+import {Buffer} from 'buffer';
 
 const App = (): React.JSX.Element => {
+  let session = useRef<HCESession | undefined>();
+
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -20,23 +27,25 @@ const App = (): React.JSX.Element => {
   };
 
   useEffect(() => {
-    const originalContent = 'PKJ4VF2BCVMC';
-    const transformedContent = transformContent(originalContent);
+    async function loadSession() {
+      const originalContent = 'PKJ4VF2BCVMC';
+      // U03CPPPNHYNK
+      // PK94VF232VJB
+      const transformedContent = transformContent(originalContent);
 
-    const content = {
-      content: {
+      const tag = new NFCTagType4({
+        type: NFCTagType4NDEFContentType.Text,
         content: transformedContent,
-        type: 'text',
         writable: false,
-      },
-      type: 'NFCTag',
-    };
+      });
 
-    HCE.setContent(content);
+      session.current = await HCESession.getInstance();
+      await session.current.setApplication(tag);
 
-    return () => {
-      HCE.stop();
-    };
+      await session.current.setEnabled(true);
+    }
+
+    loadSession();
   }, []);
 
   return (
@@ -47,9 +56,5 @@ const App = (): React.JSX.Element => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  // Add your styles here
-});
 
 export default App;
